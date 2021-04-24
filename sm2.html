@@ -7,46 +7,71 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>SM2</title>
     <script src="./lib/crypto-js.js"></script>
-    <script src="./sm2.js"></script>
+    <script src="./lib/sm2.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+    body {
+        text-align: center
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .item {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        min-width: 500px;
+    }
+
+    label {
+        text-align: left;
+        margin: 5px;
+    }
+
+    textarea {
+        height: 100px;
+    }
+
+    button {
+        padding: 5px 20px;
+        margin-top: 20px;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+    }
+    </style>
 </head>
 
 <body>
-    <h1>SM2</h1>
-    <div class="toolbar">
-        <input type="text" value="hello world" placeholder="请输入当前要加密的文本" id="encode-text" />
-        <button onclick="generateCipher()">生成 20 条密文</button>
-        <button onclick="clearCipher()">清空密文</button>
+    <h1>SM2 加密示例</h1>
+    <div class="container">
+        <div class="item">
+            <label>SM2 公钥:</label>
+            <textarea placeholder="请输入 SM2 公钥" id="sm2-publickey">04bf7fe96b30687d91df7c787fc9cf5d5f1258535d201202711027f3aea155394c47df8f4ac316c4b8c149c0071cadb2531f5f1dc12e52660b5ca12ed6a0e9ba24</textarea>
+        </div>
+        <div class="item">
+            <label>明文:</label>
+            <textarea placeholder="请输入待加密的文本" id="plain-text">HFUF12hfg</textarea>
+        </div>
+        <div class="item">
+            <label>密文:</label>
+            <textarea placeholder="密文" id="cipher-text"></textarea>
+        </div>
+        <div class="item">
+            <button onclick="generateCipher()">生成 SM2 密文</button>
+        </div>
     </div>
-
-    <ul id="cipher-items" style="font-size: 14px;">
     </ul>
-
     <script>
-        var pubkeyHex =
-            "0452712EBA7FE2C9615F6DE59C6EF662R085BD52B25952597CC95014BB8F201987F8D818EFFE710DBEC08FE2E4C7E3E0113EEBAB4B0E8B044E1A3CC8B149D76BE7";
-        var keyCollection = [];
-        var $cipherItems = $('#cipher-items');
-        var $msg = $('#encode-text');
-        
-        function generateCipher() {
-            var item = '';
-            var msg = $msg.val();
-
-            for (var i = 0, len = 20; i < len; i++) {
-                var encryptData = sm2Encrypt(msg, pubkeyHex, 0);
-
-                keyCollection.push(encryptData);
-                item += `<li class="cipher-items-item">{SM2}${encryptData}</li>`
-            }
-
-            $cipherItems.html($cipherItems.html() + item);
-        }
-
-        function clearCipher() {
-            keyCollection = [];
-            $cipherItems.html();
-        }
+    function generateCipher() {
+        $('#cipher-text').val(sm2Encrypt($('#plain-text').val(), $('#sm2-publickey').val(), 1))
+    }
     </script>
 </body>
 
